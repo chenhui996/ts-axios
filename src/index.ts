@@ -17,10 +17,7 @@ function processConfig(config: AxiosRequestConfig): void {
   config.data = transformRequestData(config)
 } // 处理请求配置
 
-function transformResponseData(res: AxiosResponse): AxiosResponse {
-  res.data = transformResponse(res.data)
-  return res
-} // 处理请求数据
+// ---------------------------------------------------------------------
 
 function transformHeaders(config: AxiosRequestConfig): void {
   const { headers = {}, data } = config
@@ -35,5 +32,14 @@ function transformUrl(config: AxiosRequestConfig): string {
   const { url, params } = config
   return buildURL(url, params)
 } // 处理请求地址
+
+// ---------------------------------------------------------------------
+
+function transformResponseData(res: AxiosResponse): AxiosResponse {
+  res.data = transformResponse(res.data)
+  return res
+} // 处理响应数据
+
+// ---------------------------------------------------------------------
 
 export default axios

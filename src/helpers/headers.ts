@@ -31,7 +31,7 @@ export function processHeaders(headers: any, data: any): any {
 export function parseHeaders(headers: string): any {
   let parsed = Object.create(null)
   if (!headers) {
-    return
+    return parsed
   }
 
   headers.split('\r\n').forEach(line => {

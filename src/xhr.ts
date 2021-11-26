@@ -2,7 +2,7 @@ import { AxiosRequestConfig, Method, AxiosResponse, AxiosPromise } from './types
 import { parseHeaders } from './helpers/headers'
 
 export default function xhr(config: AxiosRequestConfig): AxiosPromise {
-  return new Promise(resolve => {
+  return new Promise((resolve, reject) => {
     const { url, method = 'get', data = null, headers, responseType } = config // 可以把config里面的属性拿出来
     const request = new XMLHttpRequest() // 创建一个XMLHttpRequest对象
 
@@ -42,6 +42,11 @@ export default function xhr(config: AxiosRequestConfig): AxiosPromise {
         request.setRequestHeader(name, headers[name])
       }
     }) // 设置请求头
+
+    request.onerror = function handleError() {
+      reject(new Error('Network Error'))
+    } // 请求错误
+
     request.send(data)
   })
 }
