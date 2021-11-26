@@ -39,8 +39,17 @@ export default function xhr(config: AxiosRequestConfig): AxiosPromise {
         request
       } // 响应体
 
-      resolve(response) // 返回响应体
+      handleResponse(response) // 返回响应体
     }
+
+    function handleResponse(response: AxiosResponse) {
+      // 如果是个promise对象，就执行then方法
+      if (response.status >= 200 && response.status < 300) {
+        resolve(response) // 成功
+      } else {
+        reject(new Error(`Request failed with status code ${response.status}`)) // 失败
+      }
+    } // 响应处理
 
     Object.keys(headers).forEach(name => {
       // 循环headers里面的属性
