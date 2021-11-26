@@ -3,8 +3,16 @@ import { parseHeaders } from './helpers/headers'
 
 export default function xhr(config: AxiosRequestConfig): AxiosPromise {
   return new Promise((resolve, reject) => {
-    const { url, method = 'get', data = null, headers, responseType } = config // 可以把config里面的属性拿出来
+    const { url, method = 'get', data = null, headers, responseType, timeout } = config // 可以把config里面的属性拿出来
     const request = new XMLHttpRequest() // 创建一个XMLHttpRequest对象
+
+    if (timeout) {
+      request.timeout = timeout
+    }
+
+    request.ontimeout = function() {
+      reject(new Error(`Timeout of ${timeout} ms exceeded`))
+    } // 超时处理
 
     if (responseType) {
       // 如果有responseType，就设置responseType
