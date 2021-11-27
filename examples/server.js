@@ -30,12 +30,18 @@ app.use(bodyParser.urlencoded({ extended: true })) // for parsing application/x-
 
 const router = express.Router() // create a router
 
+// -----------------------------------------------------------------------------
+
+// simple
 router.get('/simple/get', function(req, res) {
   res.json({
     msg: 'this is a simple get request'
   })
 })
 
+// -----------------------------------------------------------------------------
+
+// base
 router.get('/base/get', function(req, res) {
   res.json(req.query)
 })
@@ -57,6 +63,29 @@ router.post('/base/buffer', function(req, res) {
       res.json(msg.toJSON()) // send response
     })
 })
+
+// -----------------------------------------------------------------------------
+
+// error
+router.get('/error/get', function(req, res) {
+  if (Math.random() > 0.5) {
+    res.json({
+      msg: 'this is a simple get request'
+    })
+  } else {
+    res.status(500).end()
+  }
+})
+
+router.get('/error/timeout', function(req, res) {
+  setTimeout(function() {
+    res.json({
+      msg: 'this is a simple get request'
+    })
+  }, 3000)
+})
+
+// -----------------------------------------------------------------------------
 
 app.use(router) // register the router
 

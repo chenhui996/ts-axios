@@ -8,12 +8,12 @@ export function transformRequest(data: any): any {
 }
 
 export function transformResponse(data: any): any {
-  //   if (typeof data === 'string') {
-  //     try {
-  //       data = JSON.parse(data);
-  //     } catch (e) {
-  //       // do nothing
-  //     }
-  //   }
+  if (typeof data === 'string') {
+    try {
+      data = JSON.parse(data)
+    } catch (e) {
+      // do nothing
+    }
+  }
   return data
 }
