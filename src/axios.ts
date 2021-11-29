@@ -1,45 +1,15 @@
-import { AxiosRequestConfig, AxiosPromise, AxiosResponse } from './types'
-import xhr from './xhr'
-import { buildURL } from './helpers/url'
-import { transformRequest, transformResponse } from './helpers/data'
-import { processHeaders } from './helpers/headers'
+import { AxiosInstance } from './types'
+import Axios from './core/Axios'
+import { extend } from './helpers/util'
 
-function axios(config: AxiosRequestConfig): AxiosPromise {
-  processConfig(config) // 处理请求配置
-  return xhr(config).then(response => {
-    return transformResponseData(response)
-  }) // 返回一个promise
-} // 发送请求
+function createInstance(): AxiosInstance {
+  const context = new Axios() // 创建axios实例
+  // 定义入口为 Axios.prototype.request -> 目的： 调用 axios({}) 时，实则调用 axios.request({})
+  const instance = Axios.prototype.request.bind(context) // 将 Axios.prototype.request 方法的 this 指向 context
+  extend(instance, context) // 将 context 的属性拷贝到 instance 上
+  return instance as AxiosInstance // 返回 instance
+}
 
-function processConfig(config: AxiosRequestConfig): void {
-  config.url = transformUrl(config)
-  config.headers = transformHeaders(config)
-  config.data = transformRequestData(config)
-} // 处理请求配置
-
-// ---------------------------------------------------------------------
-
-function transformHeaders(config: AxiosRequestConfig): void {
-  const { headers = {}, data } = config
-  return processHeaders(headers, data)
-} // 处理请求头
-
-function transformRequestData(config: AxiosRequestConfig): any {
-  return transformRequest(config.data)
-} // 处理请求数据
-
-function transformUrl(config: AxiosRequestConfig): string {
-  const { url, params } = config
-  return buildURL(url, params)
-} // 处理请求地址
-
-// ---------------------------------------------------------------------
-
-function transformResponseData(res: AxiosResponse): AxiosResponse {
-  res.data = transformResponse(res.data)
-  return res
-} // 处理响应数据
-
-// ---------------------------------------------------------------------
+const axios = createInstance()
 
 export default axios
