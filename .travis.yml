@@ -8,7 +8,6 @@ node_js:
   - '10'
   - '11'
   - '8'
-  - '6'
 after_success:
   - npm run travis-deploy-once "npm run report-coverage"
   - if [ "$TRAVIS_BRANCH" = "master" -a "$TRAVIS_PULL_REQUEST" = "false" ]; then npm run travis-deploy-once "npm run deploy-docs"; fi
